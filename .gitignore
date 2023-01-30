@@ -1,6 +1,4 @@
 *.vtk
-/.spyproject/
-.spyproject/
-/.spyproject/config/
-.spyproject/config/
+.spyderproject
+.spyproject
 *.bak
