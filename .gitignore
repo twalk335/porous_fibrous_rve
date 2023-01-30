@@ -1,3 +1,6 @@
 *.vtk
+/.spyproject/
 .spyproject/
+/.spyproject/config/
+.spyproject/config/
 *.bak
