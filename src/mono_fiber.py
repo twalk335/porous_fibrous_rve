@@ -58,35 +58,38 @@ def cylinder_maker(num_points, height, radius, center):
     return mesh
 
 
+def main():
 
-
-# create cylinder #1    
-test_mesh1 = cylinder_maker(10, 10, 1, (0, 0, 0))
-# test_mesh.write_vtk("cylinder")
-# create cylinder #2
-test_mesh2 = cylinder_maker(10, 10, 0.8, (2.0, 0, 0))
-test_mesh3 = cylinder_maker(100, 15, 2.2, (6.0, 0, -2.5))
-
-
-# combine their meshes
-meshes = [test_mesh1, test_mesh2, test_mesh3]
-
-# create arrays of points and cells using generators 
-gp = [np.array(mesh.points) for mesh in meshes]
-
-# cells contain links to points by its number. Since we concatenated points, numbers of second 
-# (and every following one) will be increased by cumulative sum of body points number
-body_points_num = np.array([len(mesh.points) for mesh in meshes])
-ge = [np.array(meshes[i].elements) + np.sum(body_points_num[:i]) for i in range(len(meshes))]
-
-# concatination of points and cells; 
-global_points = np.vstack(gp)
-global_cells = np.vstack(ge)
-
-
-vtkelements = pyvtk.VtkData(
-    pyvtk.UnstructuredGrid(
-        global_points,
-        tetra = global_cells),
-            "Mesh")
-vtkelements.tofile("both")
+    # create cylinder #1    
+    test_mesh1 = cylinder_maker(10, 10, 1, (0, 0, 0))
+    # test_mesh.write_vtk("cylinder")
+    # create cylinder #2
+    test_mesh2 = cylinder_maker(10, 10, 0.8, (2.0, 0, 0))
+    test_mesh3 = cylinder_maker(100, 15, 2.2, (6.0, 0, -2.5))
+    
+    
+    # combine their meshes
+    meshes = [test_mesh1, test_mesh2, test_mesh3]
+    
+    # create arrays of points and cells using generators 
+    gp = [np.array(mesh.points) for mesh in meshes]
+    
+    # cells contain links to points by its number. Since we concatenated points, numbers of second 
+    # (and every following one) will be increased by cumulative sum of body points number
+    body_points_num = np.array([len(mesh.points) for mesh in meshes])
+    ge = [np.array(meshes[i].elements) + np.sum(body_points_num[:i]) for i in range(len(meshes))]
+    
+    # concatination of points and cells; 
+    global_points = np.vstack(gp)
+    global_cells = np.vstack(ge)
+    
+    
+    vtkelements = pyvtk.VtkData(
+        pyvtk.UnstructuredGrid(
+            global_points,
+            tetra = global_cells),
+                "Mesh")
+    vtkelements.tofile("both")
+    
+if __name__=="__main__":
+    main()
