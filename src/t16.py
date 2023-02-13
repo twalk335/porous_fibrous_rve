@@ -61,6 +61,7 @@ lcar3 = 0.055
 
 gmsh.model.mesh.setSize(gmsh.model.getEntities(0), lcar1)
 
+
 gmsh.model.mesh.setSize(gmsh.model.getBoundary(holes, False, False, True), lcar3)
 
 eps = 1e-3

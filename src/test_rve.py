@@ -7,16 +7,22 @@ Created on Tue Jan 31 09:50:37 2023
 import numpy as np
 import pyvtk
 
-from MeshpyRVE import fibrous_system
+import SpatialFiber as sf
+
+def  fibrous_system(properties, outputf_file):
+    pass
+    
+
+
 
 def main():
     
     rve_prop = {
-        "num_meshes": 100,
+        "num_fibers": 100,
         "radius": 1,
         "height": 50,
         "width": 50,
-        "thickness": 10,
+        "depth": 10,
         "center": (0,0,0),
         "tolerance": 0
     }
