@@ -9,6 +9,7 @@ import gmsh
 import numpy as np
 import scipy as sc
 
+
 from numpy.linalg import norm
 
 class Str8Fiber:
@@ -90,6 +91,30 @@ def calc_box(point, diam):
     
     return np.array([xmin, ymin, zmin, xmax, ymax, zmax])
 
+
+def generate_fiber_by_angles(xy, alpha, beta, z_bounds, diam):
+    new_beta = np.arctan(np.tan(beta)/np.abs(np.cos(alpha)))
+    phi = alpha
+    theta = np.pi/2 - new_beta
+    
+    dz = (z_bounds[1] - z_bounds[0])/2 + diam/2;
+    
+    # r = dz / np.cos(theta);
+    dx = dz*np.tan(theta)*np.cos(phi)
+    dy = dz*np.tan(theta)*np.sin(phi)
+    
+    pA = [xy[0] - dx, xy[1] - dy, z_bounds[0] - diam/2]
+    pB = [xy[0] + dx, xy[1] + dy, z_bounds[1] + diam/2]
+    
+    return Str8Fiber(pA, pB, diam)
+
+
+    
+    
+
+# import matplotlib.pyplot as plt
+
+# plt.hist(theta)    
 
 
 
