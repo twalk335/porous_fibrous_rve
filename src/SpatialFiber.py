@@ -23,6 +23,8 @@ class Str8Fiber:
         
         self.body_ind = gmsh.model.occ.addCylinder(*p, *e, d/2)
         
+        self.neighbours = []
+        
     def __getitem__(self, key):
         if key == "x0":
             return self.start_point[0]
@@ -55,12 +57,40 @@ def dist(t, fib0, fib1):
 
     return np.sqrt((x_l0 - x_l1)**2 + (y_l0 - y_l1)**2 + (z_l0 - z_l1)**2)
 
-def sk_min_dist(fib_a, fib_b):
+def sk_min_dist(fib_a, fib_b, inbounds = True):
     
     n = np.cross(fib_a["e"], fib_b["e"])
     d = np.abs(np.dot(n, fib_a["p"] - fib_b["p"]))/np.linalg.norm(n, 2)
     t0 = np.dot(np.cross(fib_b["e"], n), fib_b["p"] - fib_a["p"])/np.dot(n,n)
     t1 = np.dot(np.cross(fib_a["e"], n), fib_b["p"] - fib_a["p"])/np.dot(n,n)
+    
+    if inbounds:
+        if (0 <= t0 <= 1) and (0 <= t1 <= 1):
+            pass
+        else:
+            d = np.inf
+            d1 = norm(fib_a.start_point - fib_b.start_point)
+            if d1 < d:
+                d = d1
+                t0 = 0.0
+                t1 = 0.0
+            d2 = norm(fib_a.start_point - fib_b.end_point)
+            if d2 < d:
+                d = d2
+                t0 = 0.0
+                t1 = 1.0
+            d3 = norm(fib_a.end_point - fib_b.start_point)
+            if d1 < d:
+                d = d3
+                t0 = 1.0
+                t1 = 0.0
+            d4 = norm(fib_a.end_point - fib_b.end_point)
+            if d1 < d:
+                d = d4
+                t0 = 1.0
+                t1 = 1.0
+                
+            
     return d, t0, t1
     
 def parallel(fib_a, fib_b, eps_ = 1e-5):
@@ -73,6 +103,8 @@ def check_sk_intersection(fib_a, fib_b):
         return True, dist, t_a, t_b
     else:
         return False, dist, t_a, t_b
+    
+   
         
     
 def add_fiber_cylinder(fiber, ii = -1):
